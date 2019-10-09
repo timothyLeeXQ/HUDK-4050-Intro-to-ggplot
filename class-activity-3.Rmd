@@ -5,11 +5,13 @@ date: "10/2/2018"
 output: html_document
 ---
 
+```{r}
+#install.packages("ggplot2")
+library(tidyverse)
+```
+
 #Mapping aesthetic to data to = layer
 ```{r}
-install.packages("ggplot2")
-library(ggplot2)
-
 ggplot(diamonds, aes(x = price, y = carat)) +
   geom_point()
 ```
@@ -43,25 +45,36 @@ ggplot(mpg, aes(displ, hwy, color = class)) +
 Can you create a line graph using the "economics_long" data set that shows change over time in "value01" for different categories of "variable"?
 
 ```{r}
-
+economics_long %>% 
+  ggplot(aes(x = date, y= value01)) + 
+  geom_line() + 
+  facet_wrap(~variable)
 ```
 
 If you would like to recreate the Minard graphic of Napoleon's Troops the code is below and the data is in this repo.
 
 ```{r}
+cities <- read_table2(file = "cities.txt")
+troops <- read_table2(file = "troops.txt")
+temps <- read_table2(file = "temps.txt")
+```
 
+
+```{r}
 ggplot(cities, aes(long, lat)) +
-  geom_path(aes(size = survivors, colour =
-direction,
-    group = interaction(group, direction)), data =
-troops) +
-  geom_text(aes(label = city), hjust = 0, vjust = 1,
-size = 4)
+      geom_path(data = troops, aes(size = survivors,
+                    colour = direction,
+                    group = interaction(group, direction))) +
+      geom_text(aes(label = city),
+                hjust = 0,
+                vjust = 1,
+                size = 4)
+
 # Polish appearance
 last_plot() +
   scale_x_continuous("", limits = c(24, 39)) +
   scale_y_continuous("") +
   scale_colour_manual(values = c("grey50","red")) +
-  scale_size(to = c(1, 10))
+  scale_size(range = c(1, 10))
 ```
 
